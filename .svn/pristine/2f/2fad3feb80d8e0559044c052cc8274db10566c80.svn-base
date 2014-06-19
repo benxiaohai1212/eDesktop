@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Configs>
-	<Config Name="CWSPdServer">172.16.169.113:8080/CWSAgentServer</Config>
-	<Config Name="CWSUpdateServer">172.16.169.113:8080/CWSAgentServer</Config>
-	<Config Name="other">some other configs</Config>
-</Configs>
