@@ -1,0 +1,179 @@
+/*
+ * $Id$
+ *
+ * All Rights Reserved 2013 China OPS Information Technology Co.,Ltd.
+ */
+package com.chinaops.web.agent.controller;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.StringWriter;
+
+import javax.crypto.spec.SecretKeySpec;
+
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+import org.jdom.JDOMException;
+import org.jdom.input.SAXBuilder;
+import org.jdom.output.Format;
+import org.jdom.output.XMLOutputter;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.chinaops.web.agent.common.Keys;
+import com.chinaops.web.agent.util.AESCBCEncryptor;
+import com.chinaops.web.agent.util.RSAEncryptor;
+
+/**
+ *
+ * 
+ * @author Harley Ren  
+ */
+@Controller
+public class UpdateInfoController {
+    // ========================== Attributes ============================
+
+    // ========================= Constructors ===========================
+
+    // ======================= Getters & Setters ========================
+
+    // ======================== Public methods ==========================
+    @RequestMapping(value = "/update_info.do")
+    public @ResponseBody
+    HttpEntity<byte[]> getUpdateInfo(@RequestParam String ostype, @RequestParam String arch) {
+
+        //System.out.println(String.format("cipherText: %s , sk: %s", cipherText, sk));
+        
+        String secretKey = "";
+        String encryptedNewPassword = "";
+        try {
+            if (arch.toLowerCase().equals("amd64")) {
+            	arch = "64";
+            } else if(arch.toLowerCase().equals("386")) {
+            	arch = "32";
+            }           
+                        
+            String updateInfo = updateInfoXML(ostype,arch);
+            
+            SecretKeySpec key = AESCBCEncryptor.generateKey();
+            
+            //把新密码用AES加密。
+            byte[] encryptNewPasswordBytes = AESCBCEncryptor.encrypt(updateInfo.getBytes(), Base64.encodeBase64String(key.getEncoded()));
+            
+            //把AES的key用RSA加密.
+            byte[] keyBytes = RSAEncryptor.encryptByPublicKey(key.getEncoded(), Keys.PUBLIC_KEY);
+            
+            secretKey = Base64.encodeBase64String(keyBytes);
+            encryptedNewPassword = Base64.encodeBase64String(encryptNewPasswordBytes);
+            
+        } catch (Exception e) {
+            log.error(e);
+        }
+
+        Document document = DocumentHelper.createDocument();
+        document.setXMLEncoding("UTF-8");
+        Element rootElement = document.addElement("Result");
+
+        Element eleSecretKey = rootElement.addElement("SecretKey");
+        eleSecretKey.addText(secretKey);
+        Element element = rootElement.addElement("UpdateInfo");
+        element.addText(encryptedNewPassword);
+
+        String xml = document.asXML();
+
+        byte[] documentBody = xml.getBytes();
+
+        HttpHeaders header = new HttpHeaders();
+        header.setContentType(new MediaType("application", "xml"));
+        header.setContentLength(documentBody.length);
+        return new HttpEntity<byte[]>(documentBody, header);
+    
+    }
+    // ==================== Private utility methods =====================
+    private String updateInfoXML(String ostype,String arch) throws JDOMException, IOException {
+    	String filename = ostype + "_" + arch + ".xml";
+    	org.jdom.Document document=null; 
+    	StringWriter out=null; //输出对象   
+    	String sReturn =""; //输出字符串   
+    	SAXBuilder reader = new SAXBuilder();   
+		String classname = this.getClass().toString();
+		String pathname = this.getClass()
+		         .getResource(classname.substring(classname.lastIndexOf(".") + 1) + ".class")
+		         .getPath();
+		String propath = pathname.substring(0, pathname.indexOf("/WEB-INF"))  +java.io.File.separatorChar + "download" +java.io.File.separatorChar  + filename;
+		
+		java.io.File xmlfile = new java.io.File(propath);
+		if (xmlfile.exists()) {
+			document=reader.build(new File(propath));
+			 Format format =Format.getPrettyFormat();      
+			 format.setEncoding("UTF-8");//设置编码格式    
+			XMLOutputter outputter =new XMLOutputter();   
+			out=new StringWriter();   
+			 outputter.output(document,out);  
+			 sReturn=out.toString();   
+
+		}
+    	
+    	return sReturn;
+    	/**
+        return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
+        		"<UpdateInfo>\n" + 
+        		"    <UpdateTime>2013-05-23 12:30:00</UpdateTime>\n" + 
+        		"    <!-- agent一般是一个可执行文件，在linux下，需要在下载后添加执行权限 -->\n" + 
+        		"    <Agent>\n" + 
+        		"        <!-- Filename是相对于客户端ServiceRoot的存储路径 -->\n" + 
+        		"        <Filename>images/CWSClient</Filename>\n" + 
+        		"        <DownloadURI>images/CWSClient</DownloadURI>\n" + 
+        		"        <Md5sum>0fd0c3b2b11c77e22f52cb2f60410c0f</Md5sum>\n" + 
+        		"        <Version>1.0.1</Version>\n" + 
+        		"    </Agent>\n" + 
+        		"    <Agent>\n" + 
+        		"        <Filename>images/cpw</Filename>\n" + 
+        		"        <DownloadURI>images/cpw</DownloadURI>\n" + 
+        		"        <Md5sum>a048675f5c40fb24314aa4206c5b7f12</Md5sum>\n" + 
+        		"        <Version>2.0.1</Version>\n" + 
+        		"    </Agent>\n" + 
+        		"    <File>\n" + 
+        		"        <!-- 通常是某个Agent的配置信息 -->\n" + 
+        		"        <Filename>config.xml</Filename>\n" + 
+        		"        <DownloadURI>images/config.xml</DownloadURI>\n" + 
+        		"        <Md5sum>331c4de583535d9e562712c41981325b</Md5sum>\n" + 
+        		"    </File>\n" + 
+        		"    <File>\n" + 
+        		"        <Filename>cwsagents.xml</Filename>\n" + 
+        		"        <DownloadURI>images/cwsagents.xml</DownloadURI>\n" + 
+        		"        <Md5sum>0454b321e20c8b3e9d1d1833579d6607</Md5sum>\n" + 
+        		"    </File>\n" + 
+        		"\n" + 
+        		"    <!-- 在升级过程中需要执行的命令，需要要按照cmd在本文件中出现的顺序依次执行 -->\n" + 
+        		"    <!-- $SERVICE_ROOT : CWS Agent安装的目录  -->\n" + 
+        		"    <Cmd>\n" + 
+        		"        <Name>chmod</Name>\n" + 
+        		"        <Arg>+x</Arg>\n" + 
+        		"        <Arg>$SERVICE_ROOT/CheckUpdate</Arg>    \n" + 
+        		"    </Cmd>\n" + 
+        		"    <Cmd>\n" + 
+        		"        <Name>uname</Name> \n" + 
+        		"        <Arg>-a</Arg>\n" + 
+        		"    </Cmd>\n" + 
+        		"</UpdateInfo>";
+        		
+        		**/
+    }
+    // ========================== main method ===========================
+    private final Log    log = LogFactory.getLog(this.getClass());
+    public static void main(String[] args) throws JDOMException, IOException {
+    	UpdateInfoController u = new UpdateInfoController();
+    	String s = u.updateInfoXML("windows07","32位");
+    	System.out.println(s);
+	}
+}

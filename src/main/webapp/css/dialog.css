@@ -1,0 +1,56 @@
+
+.dialog-overlay {
+	BACKGROUND: gray; FILTER: alpha(opacity:50); opacity: 0.5
+}
+.dialog {
+	PADDING: 5px;  
+	BACKGROUND: #DBDBDB; /* gray; */ 
+	FILTER: alpha(opacity:70); 
+	opacity: 0.9; 
+	border-radius: 3px; 
+	-moz-border-radius: 3px; 
+	-webkit-border-radius: 3px
+}
+.dialog .bar {
+	PADDING-RIGHT: 6px;
+	PADDING-LEFT: 6px; 
+	MIN-HEIGHT: 15px; 
+	padding:10px 5px 5px 5px;
+	BACKGROUND: #000; 
+	//PADDING-BOTTOM: 6px; 
+	CURSOR: move; 
+	COLOR: #fff; 
+	PADDING-TOP: 6px
+}
+.dialog .bar .title {
+	FLOAT: left; MARGIN-RIGHT: 10px;FONT-WEIGHT:BOLD;
+}
+.dialog .bar .close {
+	FLOAT: right; CURSOR: pointer; TEXT-DECORATION: underline
+}
+.dialog .content {
+	PADDING-RIGHT: 10px; PADDING-LEFT: 10px; BACKGROUND: #fff; PADDING-BOTTOM: 10px; PADDING-TOP: 10px
+}
+.dialog IFRAME {
+	WIDTH: 100%; HEIGHT: 100%
+}
+.content IMG {
+	MAX-WIDTH: 700px; OVERFLOW: auto; MAX-HEIGHT: 500px
+}
+select { width:150px; border:1px solid #DBDBDB; height:20px; vertical-align: middle; text-align:left; }
+.uploadTable { width:500px; border-:0px solid #DBDBDB; }
+.uploadTable th { width:40%; padding:5px; text-align: right; }
+.uploadTable td { width:50%; padding:5px; text-align: left; }
+.uploadTable td.btn { width:100%; padding:5px; text-align: center; }
+.agent_detail tr td { padding: 1px;overflow: hidden; }
+.dialog .content form {
+	height:400px;
+	width:600px;
+	overflow-y: auto; 
+	
+}
+.dialog .content #modifyEdesktop  {
+	height:400px;
+	width:600px;
+	
+}

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
+
+	<!-- ********************************************  持久层 start *********************************************** -->
+	<import resource="applicationContext-base.xml" />
+	<!-- agent持久层 -->
+	<bean id="agentDaoImpl" class="com.chinaops.web.agent.dao.AgentDaoImpl"
+		parent="genericHibernateDao" scope="prototype"/>
+	<!-- file持久层 -->
+	<bean id="fileDaoImpl" class="com.chinaops.web.agent.dao.FileDaoImpl"
+		parent="genericHibernateDao" scope="prototype"/>
+	<!-- user持久层 -->
+	<bean id="userDaoImpl" class="com.chinaops.web.agent.dao.UserDaoImpl"
+		parent="genericHibernateDao" scope="prototype"/>
+	<!-- ********************************************  持久层 end *********************************************** -->
+	
+	<!-- ********************************************  服务层 start ********************************************* -->
+	<!-- agent服务层 -->
+	<bean id="agentService" class="com.chinaops.web.agent.service.AgentService" scope="prototype">
+		<property name="agentDaoImpl" ref="agentDaoImpl"></property>
+	</bean>
+	<!-- file服务层 -->
+	<bean id="fileService" class="com.chinaops.web.agent.service.FileService" scope="prototype">
+		<property name="fileDaoImpl" ref="fileDaoImpl"></property>
+	</bean>
+	<!-- user服务层 -->
+	<bean id="userService" class="com.chinaops.web.agent.service.UserService" scope="prototype">
+		<property name="userDaoImpl" ref="userDaoImpl"></property>
+	</bean>
+	<!-- ********************************************  服务层 end *********************************************** -->
+</beans>

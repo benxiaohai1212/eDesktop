@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cws-agents>
+	<!-- agent一般是一个可执行文件，在linux下，需要在下载后添加执行权限 -->
+	
+	<Agent>		
+		<!-- agent name是唯一的，一旦确定不能修改因为CWS Scheduler要根据此名称来查询相应的执行文件。 -->
+		<Name>CWS Agent1</Name>
+		<Filename>CWSAgent1</Filename>
+		<!-- 是否要在系统启动后运行，CWS Scheduler会自动执行那些 load-on-startup 1的agent -->
+		<LoadOnStartup>1</LoadOnStartup>
+	</Agent>	
+	<Agent>
+		<Name>CWS Agent2</Name>
+		<Filename>CWSAgent2</Filename>
+		<!-- 是否要在系统启动后运行，CWS Scheduler会自动执行那些 load-on-startup 1的agent -->
+		<LoadOnStartup>1</LoadOnStartup>
+	</Agent>	
+</cws-agents>

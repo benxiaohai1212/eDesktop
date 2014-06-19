@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
+
+	<!-- ******************************************** 持久层 start *********************************************** -->
+	<!-- <import resource="applicationContext-db.xml" /> -->
+	<import resource="classpath*:applicationContext-common.xml" />
+	<!-- edesktop持久层 -->
+	<bean id="edesktopDaoImpl" class="com.chinaops.web.edesktop.dao.EdesktopDaoImpl"
+		scope="prototype" />
+
+	<!-- user持久层 -->
+	<bean id="loginUserDaoImpl" class="com.chinaops.web.edesktop.dao.LoginUserDaoImpl"
+		scope="prototype" />
+	<!-- EdeskCompany持久层 -->
+	<bean id="edeskCompanyDaoImpl" class="com.chinaops.web.edesktop.dao.EdeskCompanyDaoImpl"
+		scope="prototype" />
+	<!-- EdeskDepartment持久层 -->
+	<bean id="edeskDepartmentDaoImpl" class="com.chinaops.web.edesktop.dao.EdeskDepartmentDaoImpl"
+		scope="prototype" />
+	<!-- EdeskDomain持久层 -->
+	<bean id="edeskDomainDaoImpl" class="com.chinaops.web.edesktop.dao.EdeskDomainDaoImpl"
+		scope="prototype" />
+	<!-- EdeskStrategy持久层 -->
+	<bean id="edeskStrategyDaoImpl" class="com.chinaops.web.edesktop.dao.EdeskStrategyDaoImpl"
+		scope="prototype" />
+	<!-- EdeskGroup持久层 -->
+	<bean id="edeskGroupDaoImpl" class="com.chinaops.web.edesktop.dao.EdeskGroupDaoImpl"
+		scope="prototype" />
+	<!-- customer持久层 -->
+	<bean id="applicationCustomerDaoImpl"
+		class="com.chinaops.web.edesktop.dao.ApplicationCustomerDaoImpl"
+		scope="prototype" />
+	<!-- EdeskUser持久层 -->
+	<bean id="edeskUserDaoImpl" class="com.chinaops.web.edesktop.dao.EdeskUserDaoImpl"
+		scope="prototype" />
+	<!-- EdeskUD持久层 -->
+	<bean id="edeskUDDaoImpl" class="com.chinaops.web.edesktop.dao.EdeskUDDaoImpl"
+		scope="prototype" />
+	<!-- ******************************************** 持久层 end *********************************************** -->
+
+	<!-- ******************************************** 服务层 start ********************************************* -->
+	<!-- edesktop服务层 -->
+	<bean id="edesktopService" class="com.chinaops.web.edesktop.service.EdesktopService"
+		scope="prototype">
+		<property name="edesktopDaoImpl" ref="edesktopDaoImpl"></property>
+	</bean>
+	<!-- EdeskCompany服务层 -->
+	<bean id="edeskCompanyService" class="com.chinaops.web.edesktop.service.EdeskCompanyService"
+		scope="prototype">
+		<property name="edeskCompanyDaoImpl" ref="edeskCompanyDaoImpl"></property>
+	</bean>
+	<!-- EdeskDepartment服务层 -->
+	<bean id="edeskDepartmentService"
+		class="com.chinaops.web.edesktop.service.EdeskDepartmentService"
+		scope="prototype">
+		<property name="edeskDepartmentDaoImpl" ref="edeskDepartmentDaoImpl"></property>
+	</bean>
+	<!-- EdeskDomain服务层 -->
+	<bean id="edeskDomainService" class="com.chinaops.web.edesktop.service.EdeskDomainService"
+		scope="prototype">
+		<property name="edeskDomainDaoImpl" ref="edeskDomainDaoImpl"></property>
+	</bean>
+	<!-- EdeskStrategy服务层 -->
+	<bean id="edeskStrategyService" class="com.chinaops.web.edesktop.service.EdeskStrategyService"
+		scope="prototype">
+		<property name="edeskStrategyDaoImpl" ref="edeskStrategyDaoImpl"></property>
+	</bean>
+	<!-- EdeskGroup服务层 -->
+	<bean id="edeskGroupService" class="com.chinaops.web.edesktop.service.EdeskGroupService"
+		scope="prototype">
+		<property name="edeskGroupDaoImpl" ref="edeskGroupDaoImpl"></property>
+	</bean>
+	<!-- user服务层 -->
+	<bean id="loginUserService" class="com.chinaops.web.edesktop.service.LoginUserService"
+		scope="prototype">
+		<property name="loginUserDaoImpl" ref="loginUserDaoImpl"></property>
+	</bean>
+
+	<!-- customer服务层 -->
+	<bean id="applicationCustomerService"
+		class="com.chinaops.web.edesktop.service.ApplicationCustomerService"
+		scope="prototype">
+		<property name="applicationCustomerDaoImpl" ref="applicationCustomerDaoImpl"></property>
+	</bean>
+	<!-- EdeskUser服务层 -->
+	<bean id="edeskUserService" class="com.chinaops.web.edesktop.service.EdeskUserService"
+		scope="prototype">
+		<property name="edeskUserDaoImpl" ref="edeskUserDaoImpl"></property>
+	</bean>
+		<!-- EdeskUD服务层 -->
+	<bean id="edeskUDService" class="com.chinaops.web.edesktop.service.EdeskUDService" scope="prototype">
+		<property name="edeskUDDaoImpl" ref="edeskUDDaoImpl"></property>
+	</bean>
+	<!-- ******************************************** 服务层 end *********************************************** -->
+</beans>

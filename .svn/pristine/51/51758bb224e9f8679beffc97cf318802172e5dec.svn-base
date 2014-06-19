@@ -1,0 +1,113 @@
+package com.chinaops.web.agent.entity;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "agents")
+public class Agent {
+	
+	@Id
+    @GeneratedValue
+	private int id;
+	
+	private String name;
+	
+	private int loadonstartup;
+	
+	private String ostype;//操作系统类型
+	
+	private String arch;//操作系统位数
+	
+	private int status;//0，preRelease（预发布状态）；1，release（发布状态）；2，published（已经发布状态）
+	
+	private String filename;
+	
+	private String downloaduri;
+	
+	private String md5sum;
+	
+	private String version;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getLoadonstartup() {
+		return loadonstartup;
+	}
+
+	public void setLoadonstartup(int loadonstartup) {
+		this.loadonstartup = loadonstartup;
+	}
+
+	public String getOstype() {
+		return ostype;
+	}
+
+	public void setOstype(String ostype) {
+		this.ostype = ostype;
+	}
+
+	public String getArch() {
+		return arch;
+	}
+
+	public void setArch(String arch) {
+		this.arch = arch;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	public String getFilename() {
+		return filename;
+	}
+
+	public void setFilename(String filename) {
+		this.filename = filename;
+	}
+
+	public String getDownloaduri() {
+		return downloaduri;
+	}
+
+	public void setDownloaduri(String downloaduri) {
+		this.downloaduri = downloaduri;
+	}
+
+	public String getMd5sum() {
+		return md5sum;
+	}
+
+	public void setMd5sum(String md5sum) {
+		this.md5sum = md5sum;
+	}
+
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
+	}
+}

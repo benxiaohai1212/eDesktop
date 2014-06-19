@@ -1,0 +1,56 @@
+//agent上一页
+function agentPre(){
+	var agent_pageNum = $("#agent_pageNum").html();
+	if(agent_pageNum!=1){
+		$("#agent_pageNum").html(parseInt(agent_pageNum)-1);
+		initagentsAndfils();
+	}
+}
+//agent下一页
+function agentNext(){
+	var agent_pageNum = $("#agent_pageNum").html();
+	var agent_totalPage = $("#agent_totalPage").html();
+	if(agent_pageNum!=agent_totalPage){
+		$("#agent_pageNum").html(parseInt(agent_pageNum)+1);
+		initagentsAndfils();
+	}
+}
+//agent首页
+function agentfirst(){
+	$("#agent_pageNum").html(1);
+	initagentsAndfils();
+}
+//agent末页
+function agentlast(){
+	var agent_totalPage = $("#agent_totalPage").html();
+	$("#agent_pageNum").html(agent_totalPage);
+	initagentsAndfils();
+}
+//file上一页
+function filePre(){
+	var file_pageNum = $("#file_pageNum").html();
+	if(file_pageNum!=1){
+		$("#file_pageNum").html(parseInt(file_pageNum)-1);
+		initagentsAndfils();
+	}
+}
+//file下一页
+function fileNext(){
+	var file_pageNum = $("#agent_pageNum").html();
+	var file_totalPage = $("#file_totalPage").html();
+	if(file_pageNum!=file_totalPage){
+		$("#file_pageNum").html(parseInt(file_pageNum)+1);
+		initagentsAndfils();
+	}
+}
+//file首页
+function filefirst(){
+	$("#file_pageNum").html(1);
+	initagentsAndfils();
+}
+//file末页
+function filelast(){
+	var file_totalPage = $("#file_totalPage").html();
+	$("#file_pageNum").html(file_totalPage);
+	initagentsAndfils();
+}

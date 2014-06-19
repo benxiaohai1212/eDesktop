@@ -1,0 +1,215 @@
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page language="java" pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<style>
+
+.main {
+	width:600px;
+	height:430px;
+	text-align:center
+}
+.main .title {
+	font-size:15px;
+	padding:10px;
+}
+.main .content {
+	overflow :auto;
+	height:400px;
+	width:620px;
+	border:1px solid #EBEBEB;
+	padding-bottom:10px;
+}
+.main .content .inner {
+	font-size: 12px;
+	line-height:20px;
+	text-align:left;
+	padding-bottom:5px;
+	margin-left:10px;
+}
+.main .content .inner .company {
+	margin-top:20px;
+	padding-bottom:10px;
+	line-height:24px;
+	font-size:14px;
+	font-weight:bold;
+}
+.main .content .inner dd {
+	font-weight:bold;
+	margin-top:12px;
+	margin-bottom: 2px;
+	margin-left:22px;
+}
+.main .content .inner dt {
+	text-indent:2em;
+	line-height:20px;
+	margin-top:0px;
+	margin-bottom: 0px;
+}
+.main .content .inner dl p {
+	text-indent:2em;
+	margin-top: 0px; 
+	margin-bottom: 0px;
+	line-height:20px;
+}
+.main .content .inner dt ul {
+	margin-left:10px;
+	text-indent:3px;
+}
+</style>
+<script type="text/javascript" src="<c:url value='/js/jquery-1.8.2.js'/>"></script>
+<script type="text/javascript">
+var ostype = "<%=request.getParameter("ostype")%>";
+var index = "<%=request.getParameter("index")%>";
+var user = "<%=request.getSession().getAttribute("user")%>";
+var arch = "<%=new String(request.getParameter("arch").getBytes("ISO8859_1"), "utf-8")%>"
+contextPath = "<%=request.getContextPath()%>";
+$(document).ready(function(){
+	if(user==null || user=="" || user=="null"){
+		alert("网页过期。");
+		window.location.href = "../login.jsp";
+		return;
+	}
+	var agentUrltoAction = "";
+	var fileUrltoAction = "";
+	if(index==0){
+		$("#xmlString").show();
+		$("#xmlString2").hide();
+		$("#releasebutton").show();
+		$("#OKbutton").hide();
+		agentUrltoAction = contextPath  + "/look_agent.do";
+		fileUrltoAction = contextPath  + "/look_file.do";
+		$.ajax({
+			type: "POST",
+			url: agentUrltoAction,
+			data:{ostype:ostype,arch:arch},
+			success: function(agents) {
+				var stringToxml = "&lt;UpdateInfo&gt;<br/>";
+				$("#xmlString").append(stringToxml);
+				if(agents[0].md5sum!="0"){
+					 for(var i=0;i < agents.length;i++){
+						 var agentString = "&lt;Agent&gt;<br/>&lt;Name&gt;";
+						 var agent = agents[i];
+						 agentString += agent.name + "&lt;/Name&gt;<br/>&lt;Filename&gt;" + agent.filename + "&lt;/Filename&gt;<br/>&lt;DownloadURI&gt;" + agent.downloaduri + "&lt;/DownloadURI&gt;<br/>&lt;Md5sum&gt;" + agent.md5sum + "&lt;/Md5sum&gt;<br/>&lt;Version&gt;" + agent.version + "&lt;/Version&gt;<br/>&lt;LoadOnStartup&gt;" + agent.loadonstartup + "&lt;/LoadOnStartup&gt;<br/>&lt;/Agent&gt;<br/>";
+						 $("#xmlString").append(agentString);
+					 }
+				}
+				$.ajax({
+					type: "POST",
+					url: fileUrltoAction,
+					data:{ostype:ostype,arch:arch},
+					success: function(files) {
+						if(files[0].md5sum!="0"){
+							for(var i=0;i < files.length;i++){
+								var fileString = "&lt;File&gt;<br/>&lt;Filename&gt;";
+								 var file = files[i];
+								 fileString += file.filename + "&lt;/Filename&gt;<br/>&lt;DownloadURI&gt;" + file.downloaduri + "&lt;/DownloadURI&gt;<br/>&lt;Md5sum&gt;" + file.md5sum + "&lt;/Md5sum&gt;<br/>&lt;/File&gt;<br/>";
+								 $("#xmlString").append(fileString);
+							 }
+						}
+						var endString  = "&lt;/UpdateInfo&gt;";
+						$("#xmlString").append(endString);
+					},
+					dataType : "json"
+				});
+				
+			},
+			dataType : "json"
+		});
+	}else if(index==2){
+		$("#xmlString2").show();
+		$("#xmlString").hide();
+		$("#releasebutton").hide();
+		$("#OKbutton").show();
+		$.post(contextPath  + "/look_agent_by_status.do?ostype=" + ostype+
+				   "&arch="+arch, function(data) {
+			 re=new RegExp("<","g"); 
+			 data=data.replace(re,"&lt;"); 
+
+			//data = data.replaceAll("<","&lt;");
+			//data = data.replaceAll(">","&gt;");
+			$("#xmlString2").append(data);
+			});
+	}else{
+		$("#xmlString").show();
+		$("#xmlString2").hide();
+		$("#releasebutton").show();
+		$("#OKbutton").hide();
+		agentUrltoAction = contextPath  + "/look_agnet_by_cookie.do";
+		fileUrltoAction = contextPath  + "/look_file_by_cookie.do";
+		$.ajax({
+			type: "POST",
+			url: agentUrltoAction,
+			data:{ostype:ostype,arch:arch},
+			success: function(agents) {
+				var stringToxml = "&lt;UpdateInfo&gt;<br/>";
+				$("#xmlString").append(stringToxml);
+				if(agents[0].md5sum!="0"){
+					 for(var i=0;i < agents.length;i++){
+						 var agentString = "&lt;Agent&gt;<br/>&lt;Name&gt;";
+						 var agent = agents[i];
+						 agentString += agent.name + "&lt;/Name&gt;<br/>&lt;Filename&gt;" + agent.filename + "&lt;/Filename&gt;<br/>&lt;DownloadURI&gt;" + agent.downloaduri + "&lt;/DownloadURI&gt;<br/>&lt;Md5sum&gt;" + agent.md5sum + "&lt;/Md5sum&gt;<br/>&lt;Version&gt;" + agent.version + "&lt;/Version&gt;<br/>&lt;LoadOnStartup&gt;" + agent.loadonstartup + "&lt;/LoadOnStartup&gt;<br/>&lt;/Agent&gt;<br/>";
+						 $("#xmlString").append(agentString);
+					 }
+				}
+				$.ajax({
+					type: "POST",
+					url: fileUrltoAction,
+					data:{ostype:ostype,arch:arch},
+					success: function(files) {
+						if(files[0].md5sum!="0"){
+							for(var i=0;i < files.length;i++){
+								var fileString = "&lt;File&gt;<br/>&lt;Filename&gt;";
+								 var file = files[i];
+								 fileString += file.filename + "&lt;/Filename&gt;<br/>&lt;DownloadURI&gt;" + file.downloaduri + "&lt;/DownloadURI&gt;<br/>&lt;Md5sum&gt;" + file.md5sum + "&lt;/Md5sum&gt;<br/>&lt;/File&gt;<br/>";
+								 $("#xmlString").append(fileString);
+							 }
+						}
+						var endString  = "&lt;/UpdateInfo&gt;";
+						$("#xmlString").append(endString);
+					},
+					dataType : "json"
+				});
+				
+			},
+			dataType : "json"
+		});
+	}
+	
+});
+
+//根据操作系统和操作系统位数发布
+function releaseAgentByOstype(){
+	var urltoAction = "";
+	if(index==0){
+		urltoAction = contextPath  + "/release_agent_and_file.do";
+	}else{
+		urltoAction = contextPath  + "/release_agent_and_file_by_cookie.do";
+	}
+	$.ajax({
+		type: "POST",
+		url: urltoAction,
+		data:{ostype:ostype,arch:arch},
+		success: function(obj) {
+			  if(obj==0){
+				  alert("没有要发布的信息，请先将状态更改发布状态。");
+			  }else{
+				  alert("发布成功。");
+			  }
+			  window.location.href = "agent_file_list.jsp";
+		},
+		dataType : "json"
+	});
+}
+function OK(){
+	window.location.href = "agent_file_list.jsp";
+}
+</script>
+	<div>
+		<div></div>
+		<div>
+				<textarea id="xmlString2" rows="50" cols="200" style="display:none;" readonly="readonly"></textarea>
+				<h5 id="xmlString" style="display:none;"></h5>
+			<div id="releasebutton" style="display:none;"><input type="button" class="button_2" onclick="releaseAgentByOstype()" value="发布"/><input type="button" class="button_3"  style="margin-left:5px;" onclick="OK()" value="不发布"/></div>	
+			<div id="OKbutton" style="display:none;"><input type="button" class="button_2"  style="margin-left:5px;" onclick="OK()" value="确认"/></div>	
+		</div>
+	</div>
