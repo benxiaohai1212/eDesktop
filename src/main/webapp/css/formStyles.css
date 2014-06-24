@@ -414,6 +414,7 @@ input[type='button']{
 	filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr='#dedede', endColorStr='#efefef', gradientType='0');
 	border:1px solid #DBDBDB;
 	padding:3px 15px;
+	font-size:12px;
 }
 
 input[type='button']:hover{
@@ -421,6 +422,13 @@ input[type='button']:hover{
 	background-image:-webkit-gradient(linear, 0 0, 0 100%, from(#cdcdcd), to(#dedede));
 	background-image:-moz-linear-gradient(top,#cdcdcd,#dedede); 
 	filter:progid:DXImageTransform.Microsoft.Gradient(startColorStr='#cdcdcd', endColorStr='#dedede', gradientType='0');
+}
+.formButton input[type='button'].ok:hover {
+	background: url('../images/login/submitButton.png') no-repeat;
+	width: 290px;
+	height: 47px;
+	border: 0px;
+	margin-right: 47px;
 }
 /* .edesktop-span {
 	margin-left: 45px;
@@ -469,7 +477,7 @@ input[type='button']:hover{
 	height: 100%;
 	left: 212px;
 	margin: 0;
-	overflow: hidden;
+	
 	position: absolute;
 	right: 6px;
 	top: 63px;
